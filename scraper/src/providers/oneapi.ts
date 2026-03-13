@@ -6,8 +6,8 @@
  * Pass a config object to `createOneApiProvider` to get a ready-made
  * PricingProvider without duplicating logic.
  */
-import { fetchWithStealth } from '../browser';
-import type { ModelPricing, PricingProvider } from '../types';
+import { fetchWithStealth } from "../browser";
+import type { ModelPricing, PricingProvider } from "../types";
 
 // ── API response types ────────────────────────────────────────────────────────
 
@@ -55,7 +55,7 @@ const BASE_PRICE_PER_1M = 2;
 
 function computePrices(
   datum: OneApiDatum,
-  groupRatio: number
+  groupRatio: number,
 ): { inputPrice: number; outputPrice: number } {
   if (datum.model_price > 0) {
     return {
@@ -78,7 +78,9 @@ export interface OneApiProviderConfig {
   apiUrl: string;
 }
 
-export function createOneApiProvider(config: OneApiProviderConfig): PricingProvider {
+export function createOneApiProvider(
+  config: OneApiProviderConfig,
+): PricingProvider {
   return {
     id: config.id,
     name: config.name,
@@ -93,7 +95,7 @@ export function createOneApiProvider(config: OneApiProviderConfig): PricingProvi
       }
 
       console.log(
-        `[${config.id}] Got ${resp.data.length} model entries, ${resp.vendors.length} vendors`
+        `[${config.id}] Got ${resp.data.length} model entries, ${resp.vendors.length} vendors`,
       );
 
       const vendorMap = new Map<number, OneApiVendor>();
@@ -110,29 +112,35 @@ export function createOneApiProvider(config: OneApiProviderConfig): PricingProvi
           const { inputPrice, outputPrice } = computePrices(datum, groupRatio);
           const vendor = vendorMap.get(datum.vendor_id);
 
-          results.push({
-            modelId: datum.model_name,
-            modelName: datum.model_name,
-            provider: config.id,
-            channel: group,
-            inputPrice: Math.round(inputPrice * 1e6) / 1e6,
-            outputPrice: Math.round(outputPrice * 1e6) / 1e6,
-            modelType: datum.model_type || '文本',
-            updatedAt: now,
-            meta: {
-              vendor: vendor?.name,
-              vendorIcon: vendor?.icon,
-              description: datum.description,
-              tags: datum.tags,
-              icon: datum.icon,
-              quotaType: datum.quota_type,
-              modelRatio: datum.model_ratio,
-              completionRatio: datum.completion_ratio,
-              cacheRatio: datum.cache_ratio,
-              createCacheRatio: datum.create_cache_ratio,
-              groupRatio,
-            },
-          });
+          if (inputPrice <= 900) {
+            results.push({
+              modelId: datum.model_name,
+              modelName: datum.model_name,
+              provider: config.id,
+              channel: group,
+              inputPrice: Math.round(inputPrice * 1e6) / 1e6,
+              outputPrice: Math.round(outputPrice * 1e6) / 1e6,
+              modelType: datum.model_type || "文本",
+              updatedAt: now,
+              meta: {
+                vendor: vendor?.name,
+                vendorIcon: vendor?.icon,
+                description: datum.description,
+                tags: datum.tags,
+                icon: datum.icon,
+                quotaType: datum.quota_type,
+                modelRatio: datum.model_ratio,
+                completionRatio: datum.completion_ratio,
+                cacheRatio: datum.cache_ratio,
+                createCacheRatio: datum.create_cache_ratio,
+                groupRatio,
+              },
+            });
+          } else {
+            console.warn(
+              `[${config.id}] Skipping model ${datum.model_name} with unreasonable high price: inputPrice=${inputPrice}, outputPrice=${outputPrice}`,
+            );
+          }
         }
       }
 
