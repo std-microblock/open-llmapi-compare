@@ -23,7 +23,7 @@ interface YesVgModelsResponse {
 
 const yesvgProvider: PricingProvider = {
   id: 'yesvg',
-  name: 'yes.vg',
+  name: 'YesCode',
   url: 'https://co.yes.vg',
 
   async fetchPricing(): Promise<ModelPricing[]> {

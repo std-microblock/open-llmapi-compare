@@ -19,6 +19,10 @@ import yesvg from './yesvg';
 import duckcoding from './duckcoding';
 import cpass from './cpass';
 import undyingapi from './undyingapi';
+import bltcy from './bltcy';
+import bytecatcode from './bytecatcode';
+import magic666 from './magic666';
+import vbcode from './vbcode';
 
 const providers: PricingProvider[] = [
   yunwuProvider,
@@ -34,6 +38,10 @@ const providers: PricingProvider[] = [
   duckcoding,
   cpass,
   undyingapi,
+  bltcy,
+  bytecatcode,
+  magic666,
+  vbcode
 ];
 
 export default providers;
