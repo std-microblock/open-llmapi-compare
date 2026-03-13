@@ -14,6 +14,8 @@ import dawclaudecodeProvider from './dawclaudecode';
 import rightcodesProvider from './rightcodes';
 import ikuncode from './ikuncode';
 import packycode from './packycode';
+import nekocode from './nekocode';
+import yesvg from './yesvg';
 
 const providers: PricingProvider[] = [
   yunwuProvider,
@@ -24,6 +26,8 @@ const providers: PricingProvider[] = [
   rightcodesProvider,
   ikuncode,
   packycode,
+  // nekocode, // Temporarily disabled due to anti-scraping measures
+  yesvg,
 ];
 
 export default providers;

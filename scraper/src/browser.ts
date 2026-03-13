@@ -1,4 +1,4 @@
-import { chromium, type Browser, type BrowserContext } from 'playwright';
+import { chromium, type Browser, type BrowserContext } from 'patchright';
 
 let browser: Browser | null = null;
 
@@ -6,19 +6,14 @@ let browser: Browser | null = null;
 export async function getStealthContext(): Promise<BrowserContext> {
   if (!browser) {
     browser = await chromium.launch({
-      headless: true,
-      args: [
-        '--disable-blink-features=AutomationControlled',
-        '--disable-features=IsolateOrigins,site-per-process',
-        '--no-sandbox',
-      ],
+      headless: false
     });
   }
 
   const context = await browser.newContext({
     userAgent:
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: 800, height: 600 },
     locale: 'en-US',
   });
 

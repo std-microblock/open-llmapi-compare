@@ -28,11 +28,11 @@ jobs:
 
       - name: Install scraper dependencies
         working-directory: scraper
-        run: npm install
+        run: npm install -g pnpm@latest && pnpm install
 
-      - name: Install Playwright browsers
+      - name: Install patchright browsers
         working-directory: scraper
-        run: npx playwright install --with-deps chromium
+        run: npx patchright install --with-deps chromium
 
       - name: Run scraper
         working-directory: scraper
@@ -74,11 +74,11 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm install
+        run: npm install -g pnpm@latest && pnpm install
 
       - name: Build frontend
         working-directory: frontend
-        run: npm run build
+        run: pnpm run build
         env:
           VITE_DATA_BASE: './'
 
