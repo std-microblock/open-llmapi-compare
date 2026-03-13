@@ -24,8 +24,8 @@ const PAGE_SIZE = 50;
 export default function HomePage({ data, meta, loading, error }: HomePageProps) {
   const [search, setSearch] = useState('');
   const [modelType, setModelType] = useState('');
-  const [sortKey, setSortKey] = useState<SortKey>('name');
-  const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const [sortKey, setSortKey] = useState<SortKey>('channels');
+  const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [page, setPage] = useState(0);
 
   const modelTypes = useModelTypes(data);
@@ -197,7 +197,9 @@ export default function HomePage({ data, meta, loading, error }: HomePageProps) 
                       <div className="model-row__channels-label">通道</div>
                     </div>
 
-                    <span className="model-row__arrow">\u203A</span>
+                    <span className="model-row__arrow">
+                        \u2192
+                    </span>
                   </Link>
                 </motion.div>
               ))}
