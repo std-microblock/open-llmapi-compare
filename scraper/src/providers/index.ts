@@ -17,6 +17,8 @@ import packycode from './packycode';
 import nekocode from './nekocode';
 import yesvg from './yesvg';
 import duckcoding from './duckcoding';
+import cpass from './cpass';
+import undyingapi from './undyingapi';
 
 const providers: PricingProvider[] = [
   yunwuProvider,
@@ -30,6 +32,8 @@ const providers: PricingProvider[] = [
   // nekocode, // Temporarily disabled due to anti-scraping measures
   yesvg,
   duckcoding,
+  cpass,
+  undyingapi,
 ];
 
 export default providers;
