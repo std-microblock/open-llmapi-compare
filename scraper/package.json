@@ -1,0 +1,21 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "LLM API price scraper",
+  "main": "index.js",
+  "scripts": {
+    "scrape": "npx tsx src/index.ts",
+    "scrape:yunwu": "npx tsx src/index.ts --provider yunwu",
+    "test": "npx tsx src/test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/node": "^25.5.0",
+    "playwright": "^1.58.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

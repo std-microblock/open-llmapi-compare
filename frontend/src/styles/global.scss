@@ -1,0 +1,45 @@
+@use 'tokens';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--md-font-family);
+  background-color: var(--md-surface);
+  color: var(--md-on-surface);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color var(--md-motion-duration-medium) var(--md-motion-easing-standard),
+              color var(--md-motion-duration-medium) var(--md-motion-easing-standard);
+}
+
+a {
+  color: var(--md-primary);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+::selection {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--md-outline-variant);
+  border-radius: var(--md-shape-full);
+  &:hover { background-color: var(--md-outline); }
+}
