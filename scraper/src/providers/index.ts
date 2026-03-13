@@ -10,7 +10,7 @@ import yunwuProvider from './yunwu';
 import sssaicodeProvider from './sssaicode';
 import terminalPubProvider from './terminal-pub';
 import xcodeBestProvider from './xcode-best';
-import dawclaudecodeProvider from './dawclaudeclode'
+import dawclaudecodeProvider from './dawclaudecode'
 
 const providers: PricingProvider[] = [
   yunwuProvider,
