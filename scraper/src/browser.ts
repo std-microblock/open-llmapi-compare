@@ -6,7 +6,7 @@ let browser: Browser | null = null;
 export async function getStealthContext(): Promise<BrowserContext> {
   if (!browser) {
     browser = await chromium.launch({
-      headless: false
+      headless: true
     });
   }
 
