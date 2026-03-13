@@ -416,6 +416,38 @@
   }
 }
 
+// ========== Detail Page Split Layout ==========
+
+.detail__price-split {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 0;
+
+  .detail__price-chart {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-bottom: 20px;
+  }
+
+  .detail__price-table {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+
+    .detail__price-chart,
+    .detail__price-table {
+      flex: none;
+      width: 100%;
+    }
+  }
+}
+
 // ========== Price Comparison Bar Chart Area ==========
 
 .chart-container {
@@ -571,7 +603,7 @@
   padding: 60px 24px;
   color: var(--md-on-surface-variant);
 
-  &__icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  &__icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; display: flex; justify-content: center; }
   &__title { font-size: 18px; font-weight: 600; color: var(--md-on-surface); margin-bottom: 6px; }
   &__text { font-size: 14px; }
 }

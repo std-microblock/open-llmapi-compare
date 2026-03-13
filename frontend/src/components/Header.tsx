@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { RiMoonLine, RiSunLine } from 'react-icons/ri';
 
 interface HeaderProps {
   theme: 'light' | 'dark';
@@ -22,7 +23,7 @@ export default function Header({ theme, onToggleTheme }: HeaderProps) {
             onClick={onToggleTheme}
             title={theme === 'light' ? '切换深色模式' : '切换浅色模式'}
           >
-            {theme === 'light' ? '\u263E' : '\u2600'}
+            {theme === 'light' ? <RiMoonLine /> : <RiSunLine />}
           </button>
         </div>
       </div>

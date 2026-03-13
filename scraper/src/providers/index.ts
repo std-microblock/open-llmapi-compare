@@ -12,6 +12,8 @@ import terminalPubProvider from './terminal-pub';
 import xcodeBestProvider from './xcode-best';
 import dawclaudecodeProvider from './dawclaudecode';
 import rightcodesProvider from './rightcodes';
+import ikuncode from './ikuncode';
+import packycode from './packycode';
 
 const providers: PricingProvider[] = [
   yunwuProvider,
@@ -20,6 +22,8 @@ const providers: PricingProvider[] = [
   xcodeBestProvider,
   dawclaudecodeProvider,
   rightcodesProvider,
+  ikuncode,
+  packycode,
 ];
 
 export default providers;

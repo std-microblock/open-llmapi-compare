@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RiSearchLine, RiInboxLine, RiArrowRightSLine, RiSortAsc, RiSortDesc } from 'react-icons/ri';
 import type { PricingData, DataMeta, SortKey, SortDir } from '../types';
 import { useModelSummaries, useModelTypes } from '../hooks';
 import { formatPrice, timeAgo } from '../utils';
@@ -70,7 +71,7 @@ export default function HomePage({ data, meta, loading, error }: HomePageProps) 
       {/* Toolbar */}
       <div className="toolbar">
         <div className="search-field">
-          <span className="search-field__icon">&#x1F50D;</span>
+          <span className="search-field__icon"><RiSearchLine /></span>
           <input
             className="search-field__input"
             type="text"
@@ -104,7 +105,7 @@ export default function HomePage({ data, meta, loading, error }: HomePageProps) 
             onClick={() => handleSort(opt.key)}
           >
             {opt.label}
-            {sortKey === opt.key && (sortDir === 'asc' ? ' \u2191' : ' \u2193')}
+            {sortKey === opt.key && (sortDir === 'asc' ? <RiSortAsc style={{ marginLeft: 2 }} /> : <RiSortDesc style={{ marginLeft: 2 }} />)}
           </button>
         ))}
       </div>
@@ -129,7 +130,7 @@ export default function HomePage({ data, meta, loading, error }: HomePageProps) 
       {/* Empty */}
       {!loading && !error && summaries.length === 0 && (
         <div className="empty-state">
-          <div className="empty-state__icon">{search ? '\u{1F50D}' : '\u{1F4ED}'}</div>
+          <div className="empty-state__icon">{search ? <RiSearchLine /> : <RiInboxLine />}</div>
           <div className="empty-state__title">
             {search ? '没有匹配的模型' : '暂无数据'}
           </div>
@@ -198,7 +199,7 @@ export default function HomePage({ data, meta, loading, error }: HomePageProps) 
                     </div>
 
                     <span className="model-row__arrow">
-                        \u2192
+                        <RiArrowRightSLine />
                     </span>
                   </Link>
                 </motion.div>

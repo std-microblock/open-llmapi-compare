@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { RiArrowLeftLine } from 'react-icons/ri';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   LineChart, Line, Legend,
@@ -77,6 +78,9 @@ export default function ModelDetailPage({ data, historyDates, loading, error }: 
     ? entries.reduce((best, e, i) => (e.inputPrice > 0 && (e.inputPrice < entries[best].inputPrice || entries[best].inputPrice === 0)) ? i : best, 0)
     : -1;
 
+  // Dynamic bar chart height based on number of entries
+  const barChartHeight = Math.max(300, entries.length * 32 + 40);
+
   if (loading) {
     return (
       <main className="page">
@@ -101,7 +105,7 @@ export default function ModelDetailPage({ data, historyDates, loading, error }: 
     return (
       <main className="page">
         <button className="detail__back" onClick={() => navigate('/')}>
-          ← 返回列表
+          <RiArrowLeftLine /> 返回列表
         </button>
         <div className="empty-state">
           <div className="empty-state__title">模型未找到</div>
@@ -119,7 +123,7 @@ export default function ModelDetailPage({ data, historyDates, loading, error }: 
       transition={{ duration: 0.2 }}
     >
       <button className="detail__back" onClick={() => navigate('/')}>
-        ← 返回列表
+        <RiArrowLeftLine /> 返回列表
       </button>
 
       {/* Header */}
@@ -136,71 +140,117 @@ export default function ModelDetailPage({ data, historyDates, loading, error }: 
         {description && <p className="detail__desc">{description}</p>}
       </div>
 
-      {/* Bar Chart: Price Comparison */}
-      <div className="section-card">
-        <div className="section-card__title">
-          价格对比
-        </div>
-        <div className="section-card__body">
-          <div className="chart-tabs">
-            <button
-              className={`chart-tab ${priceMode === 'input' ? 'chart-tab--active' : ''}`}
-              onClick={() => setPriceMode('input')}
-            >
-              输入价格
-            </button>
-            <button
-              className={`chart-tab ${priceMode === 'output' ? 'chart-tab--active' : ''}`}
-              onClick={() => setPriceMode('output')}
-            >
-              输出价格
-            </button>
+      {/* Price Comparison: Bar Chart + Table side by side on wide screens */}
+      <div className="detail__price-split">
+        {/* Bar Chart */}
+        <div className="section-card detail__price-chart">
+          <div className="section-card__title">
+            价格对比
           </div>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={barData}
-                layout="vertical"
-                margin={{ top: 0, right: 30, left: 10, bottom: 0 }}
+          <div className="section-card__body">
+            <div className="chart-tabs">
+              <button
+                className={`chart-tab ${priceMode === 'input' ? 'chart-tab--active' : ''}`}
+                onClick={() => setPriceMode('input')}
               >
-                <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                <XAxis
-                  type="number"
-                  tick={{ fontSize: 11 }}
-                  tickFormatter={(v: number) => formatPrice(v)}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="shortName"
-                  width={160}
-                  tick={{ fontSize: 11 }}
-                />
-                <Tooltip
-                  formatter={(value: unknown) => [`${formatPrice(Number(value))} /M`, priceMode === 'input' ? '输入' : '输出']}
-                  labelFormatter={(_label: unknown, payload: unknown) => {
-                    const items = payload as Array<{ payload?: { name?: string } }>;
-                    return items?.[0]?.payload?.name || String(_label);
-                  }}
-                  contentStyle={{
-                    borderRadius: 8,
-                    border: '1px solid var(--md-outline-variant)',
-                    backgroundColor: 'var(--md-surface-container)',
-                  }}
-                />
-                <Bar
-                  dataKey={priceMode}
-                  radius={[0, 4, 4, 0]}
-                  barSize={20}
-                  fill="#6750A4"
-                  isAnimationActive={true}
-                  animationDuration={400}
+                输入价格
+              </button>
+              <button
+                className={`chart-tab ${priceMode === 'output' ? 'chart-tab--active' : ''}`}
+                onClick={() => setPriceMode('output')}
+              >
+                输出价格
+              </button>
+            </div>
+            <div style={{ width: '100%', height: barChartHeight }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={barData}
+                  layout="vertical"
+                  margin={{ top: 0, right: 30, left: 10, bottom: 0 }}
                 >
-                  {barData.map((entry, index) => (
-                    <rect key={index} fill={entry.fill} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                  <XAxis
+                    type="number"
+                    tick={{ fontSize: 11 }}
+                    tickFormatter={(v: number) => formatPrice(v)}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="shortName"
+                    width={160}
+                    tick={{ fontSize: 11 }}
+                  />
+                  <Tooltip
+                    formatter={(value: unknown) => [`${formatPrice(Number(value))} /M`, priceMode === 'input' ? '输入' : '输出']}
+                    labelFormatter={(_label: unknown, payload: unknown) => {
+                      const items = payload as Array<{ payload?: { name?: string } }>;
+                      return items?.[0]?.payload?.name || String(_label);
+                    }}
+                    contentStyle={{
+                      borderRadius: 8,
+                      border: '1px solid var(--md-outline-variant)',
+                      backgroundColor: 'var(--md-surface-container)',
+                    }}
+                  />
+                  <Bar
+                    dataKey={priceMode}
+                    radius={[0, 4, 4, 0]}
+                    barSize={20}
+                    fill="#6750A4"
+                    isAnimationActive={true}
+                    animationDuration={400}
+                  >
+                    {barData.map((entry, index) => (
+                      <rect key={index} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* Price Table */}
+        <div className="section-card detail__price-table">
+          <div className="section-card__title">
+            全部通道价格
+          </div>
+          <div className="section-card__body">
+            <table className="price-table">
+              <thead>
+                <tr>
+                  <th>提供方</th>
+                  <th>通道</th>
+                  <th>输入价格 /M</th>
+                  <th>输出价格 /M</th>
+                  <th>倍率</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map((e, i) => (
+                  <tr key={`${e.provider}-${e.channel}-${i}`}>
+                    <td>
+                      <span className="price-table__provider">
+                        <span className="price-table__dot" style={{ backgroundColor: getChartColor(i) }} />
+                        {getProviderName(e.provider)}
+                      </span>
+                    </td>
+                    <td className="price-table__channel">
+                      {e.channel}
+                      {i === bestInputIdx && (
+                        <span className="price-table__best-badge">最低价</span>
+                      )}
+                    </td>
+                    <td className="price-table__price">{formatPrice(e.inputPrice)}</td>
+                    <td className="price-table__price">{formatPrice(e.outputPrice)}</td>
+                    <td style={{ fontSize: 12, color: 'var(--md-on-surface-variant)' }}>
+                      {e.meta?.groupRatio !== undefined ? `x${e.meta.groupRatio}` : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -264,49 +314,6 @@ export default function ModelDetailPage({ data, historyDates, loading, error }: 
           </div>
         </div>
       )}
-
-      {/* Price Table */}
-      <div className="section-card">
-        <div className="section-card__title">
-          全部通道价格
-        </div>
-        <div className="section-card__body">
-          <table className="price-table">
-            <thead>
-              <tr>
-                <th>提供方</th>
-                <th>通道</th>
-                <th>输入价格 /M</th>
-                <th>输出价格 /M</th>
-                <th>倍率</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((e, i) => (
-                <tr key={`${e.provider}-${e.channel}-${i}`}>
-                  <td>
-                    <span className="price-table__provider">
-                      <span className="price-table__dot" style={{ backgroundColor: getChartColor(i) }} />
-                      {getProviderName(e.provider)}
-                    </span>
-                  </td>
-                  <td className="price-table__channel">
-                    {e.channel}
-                    {i === bestInputIdx && (
-                      <span className="price-table__best-badge">最低价</span>
-                    )}
-                  </td>
-                  <td className="price-table__price">{formatPrice(e.inputPrice)}</td>
-                  <td className="price-table__price">{formatPrice(e.outputPrice)}</td>
-                  <td style={{ fontSize: 12, color: 'var(--md-on-surface-variant)' }}>
-                    {e.meta?.groupRatio !== undefined ? `x${e.meta.groupRatio}` : '-'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </motion.main>
   );
 }
